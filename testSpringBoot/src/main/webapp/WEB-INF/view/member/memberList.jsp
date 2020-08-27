@@ -46,7 +46,7 @@
 	</tr>
 </table>
 <table width=50%>
-<tr align="right"><td><a href="memberRegist.mem" >회원등록</a></td></tr>
+<tr align="right"><td><a href="<c:url value = '/register/agree' />" >회원등록</a></td></tr>
 </table>
 </center>
 </body>

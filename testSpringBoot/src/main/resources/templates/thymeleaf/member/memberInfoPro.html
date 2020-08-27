@@ -18,9 +18,8 @@ $(function(){
 </script>
 </head>
 <body>
-<form name ="frm" id ="frm" method = "post" action ="memberInfoModifyPro">
-<input type="hidden" name="memChk" value="${memChk }" />
-<input type="hidden" name="id" value="${dto.userId }" />
+<form name ="frm" id ="frm" method = "post" 
+		th:action ="@{/mypage/memberInfoModifyPro}" th:object = "${memberCommand}">
 <table border = 1  width = 600 align = "center" cellpadding = 3 >
 	<input type ="hidden" name ="userId" th:value="${memberCommand.userId}" />
      <input type ="hidden" name ="userName" th:value="${memberCommand.userName}" />
@@ -42,7 +41,7 @@ $(function(){
 	</tr>
 	<tr><td>사용자 비밀번호</td>
 	    <td><input type="password" id ="userPw" name ="userPw" />
-	    <span th:text="${valid_Pw}"> </span></td></tr>
+	    <span th:text="${valid_pw}"> </span></td></tr>
 	<tr><td>사용자 이메일</td>
 	    <td><input type ="text" id ="email" name ="userEmail" 
 	        th:value = "${memberCommand.userEmail }"/></td></tr>

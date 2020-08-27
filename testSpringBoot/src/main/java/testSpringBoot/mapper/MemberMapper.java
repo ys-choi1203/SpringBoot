@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import testSpringBoot.domain.MemberDTO;
+import testSpringBoot.domain.UserPwChangeDTO;
 @Component
 @Repository(value = "testSpringBoot.mapper")
 public interface MemberMapper {
@@ -14,5 +15,6 @@ public interface MemberMapper {
 	public List<MemberDTO> selectByMember(MemberDTO memberDTO);
 	public Integer getMemberCount();
 	public Integer memberUpdate(MemberDTO dto) throws Exception;
-	public void memberDelete(String userId) throws Exception;
+	public Integer memberDelete(String userId) throws Exception;
+	public Integer userPwChange(UserPwChangeDTO dto) throws Exception;
 }
