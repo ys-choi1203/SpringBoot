@@ -52,11 +52,13 @@
 				from( select <include refid="basecolumn" />
 					from member
 				<where>
+					<!-- detail할 때  -->
 					<if test="userId != null and joinOk != null">
 						user_id = #{userId}
 					</if>
-					<if test="userId != null ">
-						user_id = #{userId} and join_ok IS not null
+					<!-- login할 때  -->
+					<if test="userId != null joinOk == null">
+						user_id = #{userId} and join_ok is not null
 					</if>
 				</where>
 				order by user_regist desc))
@@ -88,6 +90,14 @@
 			user_id = #{userId}
 		</where>
 	</update>
-</mapper>
+	
+	<delete id="memberDelete" parameterType="string" >
+		delete from member
+		<where>
+			user_id = #{userId}
+		</where>
+	</delete>
+	
+	</mapper>
 
 

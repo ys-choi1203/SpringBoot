@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import testSpringBoot.command.MemberCommand;
+import testSpringBoot.service.member.MemberDeleteService;
 import testSpringBoot.service.member.MemberDetailService;
 import testSpringBoot.service.member.MemberModifyService;
 
@@ -19,6 +20,8 @@ public class MemberDetailController {
 	private MemberDetailService memberDetailService;
 	@Autowired
 	MemberModifyService memberModifyService;
+	@Autowired
+	MemberDeleteService memberDeleteService;
 	
 	@RequestMapping(value = "memberInfo/{id}")
 	public String memberInfo(@PathVariable(value = "id") String userId,
@@ -43,6 +46,13 @@ public class MemberDetailController {
 			model.addAttribute("valid_pw", "비밀번호가 틀렸습니다.");
 			return "thymeleaf/member/memberModify";
 		}
+	}
+	
+	@RequestMapping(value = "memberInfoDel/{id}", method = RequestMethod.GET)
+	public String memberInfoDel(@RequestParam(value = "id") String userId) 
+			throws Exception {
+		memberDeleteService.memberDelete(userId);
+		return "redirect:/mem/memberList";
 	}
 	
 }

@@ -14,11 +14,14 @@ public class MemberDetailService {
 	@Autowired
 	MemberMapper memberMapper;
 	
-	public void memberDetail(String userId, Model model) throws Exception{
+	public MemberDTO memberDetail(String userId, Model model) throws Exception{
 		MemberDTO member = new MemberDTO();
 		member.setUserId(userId);
+		member.setJoinOk(userId);
 		member = memberMapper.selectByMember(member).get(0);
 		model.addAttribute("memberCommand", member);
+		
+		return member;
 	}
 
 }

@@ -14,4 +14,5 @@ public interface MemberMapper {
 	public List<MemberDTO> selectByMember(MemberDTO memberDTO);
 	public Integer getMemberCount();
 	public Integer memberUpdate(MemberDTO dto) throws Exception;
+	public void memberDelete(String userId) throws Exception;
 }
