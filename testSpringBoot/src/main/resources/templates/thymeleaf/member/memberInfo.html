@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>memberInfo</title>
+<script type="text/javascript"
+		src = "https://code.jquery.com/jquery-1.8.1.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	userId ='[[${memberCommand.userId }]]'
+	$("#modify").click(function(){
+		location.href = "../memberModify?userId="+userId
+	});
+	
+	$("#memDel").click(function(){
+		location.href="../memberInfoDel/"+userId
+	});
+});
+</script>
+</head>
+<body>
+이름 : <span th:text = "${memberCommand.userName }"></span><br/>
+아이디 : <span th:text = "${memberCommand.userId }"></span><br/>
+이메일 : <span th:text = "${memberCommand.userEmail }"></span><br/>
+생년월일 : <span th:text = "${#dates.format(memberCommand.userBirth, 'yyyy-MM-dd') }"></span><br/>
+<!-- 
+	model.addAttribute("standardDate:, new Date()); service에 있는 코드
+	<p th:text = "${#dates.formatISO(standardDate)}"></p>
+	<p th:text = "${#dates.format(standarDate, 'dd-MM-yyyy HH:mm')}"></P>
+	
+	model.addAttribute("localDateTime", LocalDateTime.now());
+	<p th:text = "${#temporals.formatISO(localDateTime)}"</p>
+	<p th:text = "${#temporals.format(localDateTime, 'dd-MM-yyyy HH:mm')}"</p>
+	
+	model.addAttribute("localDate", LocalDate.now());
+	<p th:text = "${#temporals.formatISO(localDate)}"</p>
+	<p th:text = "${#temporals.format(localDate, 'dd-MM-yyyy HH:mm')}"</p>
+	
+	model.addAttribute("timestamp", Instant.now());
+	<p th:text = "${#temporals.formatISO(timestamp)}"></p>
+-->
+성별 : <span th:if = "${memberCommand.userGender == 'M'}">남자</span>
+	 <span th:if = "${memberCommand.userGender == 'F'}">여자</span><br/>
+연락처 1 : <span th:text = "${memberCommand.userPh1 }"></span><br/>
+연락처 2 : <span th:text = "${memberCommand.userPh2 }"></span><br/>
+등록일 : <span th:text = "${#dates.format(memberCommand.userRegist, 'yyyy-MM-dd') }"></span><br/>
+주소 : <span th:text = "${memberCommand.userAddr }"></span><br/>
+<input type="button" name = "modify" id = "modify" value="수정" />
+<input type="button" value = "취소" onclick = "javascript:history.back();" />
+<input type="button" value = "회원삭제" id = "memDel" />
+</body>
+</html>
