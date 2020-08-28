@@ -22,6 +22,7 @@ public class MemberController {
 	MemberCommand setMemberCommand() {
 		return new MemberCommand();
 	}
+	
 	@RequestMapping(value = "agree", method = RequestMethod.GET)
 	public String agree() {
 		return "thymeleaf/member/agree";

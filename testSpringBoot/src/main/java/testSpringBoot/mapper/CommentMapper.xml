@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="testSpringBoot.mapper.CommentMapper">
+
+	<sql id="baseCommentColumn">
+		COMMENT_NO,CUSER_ID,COMMENT_SUBJECT,COMMENT_CONTENT, reg_date as creg_date
+	</sql>
+	
+	<sql id="baseColumn">
+		COMMENT_NO,CUSER_ID,COMMENT_SUBJECT,COMMENT_CONTENT,
+		REG_DATE
+	</sql>
+	
+	<sql id="baseMemberColumn">
+		USER_ID,USER_PW,USER_NAME,USER_BIRTH,USER_GENDER
+		, USER_EMAIL, USER_ADDR, USER_PH1,USER_PH2, USER_REGIST
+	</sql>
+	
+	<insert id="insertComment"
+		parameterType="testSpringBoot.domain.CommentDTO">
+		insert into comment1(<include refid="baseColumn" />)
+		values(num_seq.nextval,#{cuserId},#{commentSubject},#{commentContent},
+				sysdate)
+	</insert>
+	
+	<resultMap type="testSpringBoot.domain.CommentDTO" id="CommentResultMap">
+		<id column="comment_no" jdbcType="BIGINT" property="commentNo" />
+		<id column="cuser_id" jdbcType="VARCHAR" property="cuserId" />
+		<result column="CREG_DATE" jdbcType="TIMESTAMP" property="regDate" />
+		<result column="comment_subject" jdbcType="VARCHAR" property="commentSubject" />
+		<result column="comment_content" jdbcType="VARCHAR" property="commentContent" />
+	</resultMap>
+	
+	<select id="getCommentList"
+			parameterType="testSpringBoot.domain.CommentDTO"
+			resultMap="CommentResultMap">
+		select *
+			from(select rownum rn, <include refid="baseCommentColumn" />
+				from ( select <include refid="baseColumn" />
+					from comment1
+					order by REG_DATE desc))
+			<where>
+				<if test="startEndPageDTO != null">
+					rn between #{startEndPageDTO.startPage}
+					and #{startEndPageDTO.endPage}
+				</if>
+			</where>
+	</select>
+	
+	<select id="getCommentCount" resultType="int">
+		select count(*) from comment1
+	</select>
+</mapper>

@@ -2,6 +2,7 @@ package testSpringBoot.domain;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
 import org.apache.ibatis.type.Alias;
 
@@ -28,6 +29,9 @@ public class MemberDTO implements Serializable{
 	String INTEREST;
 	
 	StartEndPageDTO startEndPageDTO;
+	
+	// member에 대한 comment 1 : 다
+	List<CommentDTO> comments;
 
 	public MemberDTO(String userId, String userPw, String userName, Timestamp userBirth, String userGender,
 			String userAddr, String userPh1, String userPh2, String userEmail, Timestamp userRegist, String joinOk,
