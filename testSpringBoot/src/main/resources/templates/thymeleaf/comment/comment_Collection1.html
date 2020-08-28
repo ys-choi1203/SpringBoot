@@ -3,21 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <title>comment_Collection1</title>
-<script type="text/javascript" 
-	src="http://code.jquery.com/jquery-latest.js" ></script>
-<script type="text/javascript">
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.8.1.min.js"></script>
+<script>
 $(function(){
 	$("#btn").click(function(){
-		$.ajax({
-			type : "post",
+		$.ajax({ 
+			type : "post",	
 			url : "writerInfo",
 			dataType : "html",
-			data : {"commentNo" : "[[${replies.commentDTO.commentNo}]]"},
+			data: {"commentNo": "[[${replies.commentDTO.commentNo}]]"},
 			success : function(result){
 				$("#notice").html(result);
 			},
 			error : function(){
-				alert('에러발생');
+				alert('에러가 나왔다 홀홀홀~');
 				return;
 			}
 		});

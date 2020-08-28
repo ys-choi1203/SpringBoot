@@ -155,10 +155,45 @@
 				<include refid="baseColumn" />
 		from member m, comment1 c
 		<where>
+			 m.user_id = c.cuser_id
 			<if test="value != null">
 				comment_no = #{commnerNo}
 			</if>
 		</where>
-
+	</select>
+	
+	<resultMap type="testSpringBoot.domain.MemberDTO" id="memberResultMap">
+		<id column="user_Id" jdbcType="VARCHAR" property="userId" />
+		<result column="USER_PW" jdbcType="VARCHAR" property="userPw" />
+		<result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+		<result column="USER_BIRTH" jdbcType="TIMESTAMP" property="userBirth" />
+		<result column="USER_GENDER" jdbcType="VARCHAR" property="userGender" />
+		<result column="USER_EMAIL" jdbcType="VARCHAR" property="userEmail" />
+		<result column="USER_ADDR" jdbcType="VARCHAR" property="userAddr" />
+		<result column="USER_PH1" jdbcType="VARCHAR" property="userPh1" />
+		<result column="USER_PH2" jdbcType="VARCHAR" property="userPh2" />
+		<result column="USER_REGIST" jdbcType="TIMESTAMP" property="userRegist" />
+	</resultMap>
+	
+	<resultMap type="testSpringBoot.domain.CommentUserDTO" id="commentMemberResult">
+		<association property="commentDTO" 
+					 javaType="testSpringBoot.domain.CommentDTO"
+					 resultMap="commentResultMap" />
+		<association property="memberDTO" 
+					 javaType="testSpringBoot.domain.MemberDTO"
+					 resultMap="memberResultMap"/>
+	</resultMap>
+	
+	<select id="getCommentUserDTO" parameterType="long"
+			resultMap="commentMemberResult">
+		select <include refid="baseMemberColumn" />,
+				<include refid="baseColumn" />
+		from member m, comment1 c
+		<where>
+			m.user_id = c.cuser_id
+			<if test="value != null">
+				and comment_no = #{commnerNo}
+			</if>
+		</where>
 	</select>
 </mapper>

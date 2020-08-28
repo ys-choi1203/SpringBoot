@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import testSpringBoot.command.AuthInfo;
 import testSpringBoot.command.CommentCommand;
 import testSpringBoot.domain.CommentDTO;
+import testSpringBoot.domain.CommentUserDTO;
 import testSpringBoot.domain.ReplyDTO;
 import testSpringBoot.mapper.CommentMapper;
 
@@ -48,6 +49,8 @@ public class CommentWriteService {
 		model.addAttribute("comment", dto);
 		return "thymeleaf/comment/writerInfo";
 		*/
+		CommentUserDTO commentUser = commentMapper.getCommentUserDTO(commentNo);
+		model.addAttribute("commentUser", commentUser);
 		return "thymeleaf/comment/writerInfo1";
 	}
 

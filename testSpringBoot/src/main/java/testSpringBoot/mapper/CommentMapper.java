@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import testSpringBoot.domain.CommentDTO;
 import testSpringBoot.domain.CommentRepliesDTO;
+import testSpringBoot.domain.CommentUserDTO;
 import testSpringBoot.domain.ReplyDTO;
 
 @Component
@@ -21,5 +22,6 @@ public interface CommentMapper {
 	public CommentRepliesDTO commentRepliesCollection(Long commentNo)
 			throws Exception;
 	public CommentDTO getcommentUser(Long commentNo) throws Exception;
+	public CommentUserDTO getCommentUserDTO(Long commentNo) throws Exception;
 }
 
