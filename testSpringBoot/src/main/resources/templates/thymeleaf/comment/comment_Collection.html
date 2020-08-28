@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>comment_Collection</title>
+</head> 
+<body>
+글번호 : [[${dto.commentNo}]]<br/>
+아이디 : <span th:text="${dto.cuserId}"></span><br/>
+글제목 : <span th:text="${dto.commentSubject}"></span><br/>
+글내용 : <span th:text="${dto.commentContent}"></span><br/>
+작성일 : <span th:text="${#dates.format(dto.regDate, 'yyyy-MM-dd')}"></span><br/>
+
+<form th:action="@{/comment/replyInsert}" method = "post" >
+<input type="hidden" name="commentNo" value="${dto.commentNo}" />
+<input type="hidden" name="cuserId" value="${dto.cuserId}" />
+댓글쓰기 : <input type="text" name = "replyContent" />
+		<input type="submit" value = "댓글달기" />
+</form>
+<div th:each = "reply : ${dto.replies}">
+답글번호 : <span th:if = "${reply.replyNo}"></span><br/>
+답글작성자 : <span th:if = "${reply.ruserId}"></span><br/>
+답글내용 : <span th:if = "${reply.replyContent}"></span><br/> 
+답글작성일시 : <span th:text="${#dates.format(reply.regDate, 'yyyy-MM-dd')}"></span><br/>
+</div>
+</body>
+</html>

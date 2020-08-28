@@ -17,12 +17,12 @@ public class DataBaseInfo {
 		sessionFactory.setDataSource(dataSource);
 		return sessionFactory.getObject();
 	}
-	
+	/*
 	@Bean
     public SqlSessionTemplate sqlSession (SqlSessionFactory sqlSessionFactory) 
 	throws Exception{
         
         return new SqlSessionTemplate(sqlSessionFactory);
     }
-	 
+	 */
 }

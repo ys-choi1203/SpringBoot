@@ -39,4 +39,27 @@ public class CommentController {
 		commentWriteService.commentWrite(commentCommand, session);
 		return "redirect:/comment/comment_list";
 	}
-}
+	
+	@RequestMapping(value = "commentDetail")
+	public String commentDetail(@RequestParam(value = "commentNo") Long commentNo,
+								Model model) throws Exception{
+		String path = commentListService.commentDetail(model, commentNo);
+		return path;
+	}
+	
+	@RequestMapping(value = "replyInsert", method = RequestMethod.POST)
+	public String replyInsert(@RequestParam(value = "commentNo") Long commentNo,
+							  @RequestParam(value = "replyContent") String replyContent,
+							  @RequestParam(value = "cuserId") String cuserId,
+							  HttpSession session) throws Exception{
+		commentWriteService.replyInsert(commentNo, replyContent, cuserId, session);
+		return "redirect:/comment/commentDetail?commentNo="+commentNo;
+	}
+	
+	@RequestMapping(value = "writerInfo", method = RequestMethod.POST)
+	public String writerInfo(@RequestParam(value = "commentNo") Long commentNo,
+							Model model) throws Exception{
+		String path = commentWriteService.writeInfo(commentNo, model);
+		return path;
+	}
+} 

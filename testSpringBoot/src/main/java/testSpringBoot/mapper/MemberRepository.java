@@ -10,8 +10,8 @@ import testSpringBoot.domain.MemberDTO;
 @Component
 @Repository
 public class MemberRepository {
+	/*
 	private final String namespace="mappers.memberJoinOkMapper";
-
 	
 	@Autowired 
 	private SqlSession sqlSession;
@@ -19,4 +19,5 @@ public class MemberRepository {
 		 String statement = namespace + ".joinOkUpdate"; 
 		 return sqlSession.update(statement,memberDTO); 
 	}
+	*/
 }

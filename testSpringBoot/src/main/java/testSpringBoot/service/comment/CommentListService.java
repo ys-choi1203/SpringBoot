@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 
 import testSpringBoot.controller.PageAction;
 import testSpringBoot.domain.CommentDTO;
+import testSpringBoot.domain.CommentRepliesDTO;
 import testSpringBoot.domain.CommentUserDTO;
 import testSpringBoot.domain.StartEndPageDTO;
 import testSpringBoot.mapper.CommentMapper;
@@ -35,6 +36,21 @@ public class CommentListService {
 		model.addAttribute("count", count);
 		PageAction pageAction = new PageAction();
 		pageAction.page(model, count, limit, limitPage, page, "comment_list?");
+	}
+	
+	public String commentDetail(Model model, Long commentNo) throws Exception{
+		CommentDTO dto = new CommentDTO();
+		dto.setCommentNo(commentNo);
+		String location = "";
+		/*
+		//dto = commentMapper.getCommentList(dto).get(0);
+		dto = commentMapper.getCommentReplies(dto).get(0);
+		model.addAttribute("dto", dto);
+		return "thymeleaf/comment/comment_Collection";
+		*/
+		CommentRepliesDTO replies = commentMapper.commentRepliesCollection(commentNo);
+		model.addAttribute("replies", replies);
+		return "thymeleaf/comment/comment_Collection1";
 	}
 
 }

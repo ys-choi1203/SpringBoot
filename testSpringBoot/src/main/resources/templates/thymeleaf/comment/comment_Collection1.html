@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>comment_Collection1</title>
+<script type="text/javascript" 
+	src="http://code.jquery.com/jquery-latest.js" ></script>
+<script type="text/javascript">
+$(function(){
+	$("#btn").click(function(){
+		$.ajax({
+			type : "post",
+			url : "writerInfo",
+			dataType : "html",
+			data : {"commentNo" : "[[${replies.commentDTO.commentNo}]]"},
+			success : function(result){
+				$("#notice").html(result);
+			},
+			error : function(){
+				alert('에러발생');
+				return;
+			}
+		});
+	});
+});
+</script>
+</head> 
+<body>
+<table>
+<tr><td width = "300">
+글번호 : [[${replies.commentDTO.commentNo}]]
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<button type="button" id = "btn">작성자 정보 보기</button><br/>
+아이디 : <span th:text="${replies.commentDTO.cuserId}"></span><br/>
+글제목 : <span th:text="${replies.commentDTO.commentSubject}"></span><br/>
+글내용 : <span th:text="${replies.commentDTO.commentContent}"></span><br/>
+작성일 : <span th:text="${#dates.format(replies.commentDTO.regDate, 'yyyy-MM-dd')}"></span><br/>
+</td>
+<td width = "300">
+	<span id = "notice" />
+</td>
+</tr>
+</table>
+<form th:action="@{/comment/replyInsert}" method="post" >
+<input type="hidden" name="cuserId" th:value="${replies.commentDTO.cuserId }" />
+<input type="hidden" name="commentNo" th:value="${replies.commentDTO.commentNo }"/>
+댓글쓰기 : <input type = "text" name="replyContent"/>
+<input type="submit" value="댓글 달기" />
+</form>
+</p>
+<div th:each = "reply : ${replies.replies}">
+<span th:if="${reply.replyNo != null}">
+답글번호 : <span th:text="${reply.replyNo }"></span><br />
+답글작성자 : <span th:text="${reply.ruserId }"></span><br />
+답글내용 : <span th:text="${reply.replyContent }"></span><br />
+답글작성일시 : <span 
+		th:text="${#dates.format(reply.regDate, 'yyyy-MM-dd')}"></span>
+</span>
+</div>
+</body>
+</html>

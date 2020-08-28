@@ -8,47 +8,157 @@
 	</sql>
 	
 	<sql id="baseColumn">
-		COMMENT_NO,CUSER_ID,COMMENT_SUBJECT,COMMENT_CONTENT,
-		REG_DATE
+		COMMENT_NO,CUSER_ID,COMMENT_SUBJECT,COMMENT_CONTENT, REG_DATE
 	</sql>
 	
-	<sql id="baseMemberColumn">
-		USER_ID,USER_PW,USER_NAME,USER_BIRTH,USER_GENDER
-		, USER_EMAIL, USER_ADDR, USER_PH1,USER_PH2, USER_REGIST
+	<sql id = "baseMemberColumn">
+		USER_ID,USER_PW,USER_NAME,USER_BIRTH,USER_GENDER,
+		USER_EMAIL,USER_ADDR,USER_PH1,USER_PH2,USER_REGIST	
 	</sql>
 	
 	<insert id="insertComment"
 		parameterType="testSpringBoot.domain.CommentDTO">
-		insert into comment1(<include refid="baseColumn" />)
+		insert into comment1(
+		<include refid="baseColumn" />
+		)
 		values(num_seq.nextval,#{cuserId},#{commentSubject},#{commentContent},
-				sysdate)
+		sysdate)
 	</insert>
-	
-	<resultMap type="testSpringBoot.domain.CommentDTO" id="CommentResultMap">
+	<resultMap type="testSpringBoot.domain.CommentDTO"
+		id="CommentResultMap">
+		<id column="comment_no" jdbcType="BIGINT" property="commentNo" />
+		<id column="cuser_id" jdbcType="VARCHAR" property="cuserId" />
+		<result column="CREG_DATE" jdbcType="TIMESTAMP"
+			property="regDate" />
+		<result column="comment_subject" jdbcType="VARCHAR"
+			property="commentSubject" />
+		<result column="comment_content" jdbcType="VARCHAR"
+			property="commentContent" />
+	</resultMap>
+	<select id="getCommentList"
+		parameterType="testSpringBoot.domain.CommentDTO"
+		resultMap="CommentResultMap">
+		select *
+		from(select rownum rn,
+		<include refid="baseCommentColumn" />
+		from ( select
+		<include refid="baseColumn" />
+		from comment1
+		<where>
+			<if test="commentNo != null">
+				comment_no = #{commentNo}
+			</if>
+		</where>
+		order by REG_DATE desc))
+		<where>
+			<if test="startEndPageDTO != null">
+				rn between #{startEndPageDTO.startPage}
+				and #{startEndPageDTO.endPage}
+			</if>
+		</where>
+	</select>
+	<select id="getCommentCount" resultType="int">
+		select count(*) from comment1
+	</select>
+
+	<insert id="insertReply"
+		parameterType="testSpringBoot.domain.ReplyDTO">
+		insert into reply(reply_no,ruser_id, comment_no, cuser_id,
+							reply_content, reg_Date )
+		values(num_seq.nextval, #{ruserId}, #{commentNo}, #{cuserId},
+				#{replyContent}, sysdate)
+	</insert>
+
+	<resultMap type="testSpringBoot.domain.ReplyDTO"
+		id="replyBaseMap">
+		<id column="comment_no" jdbcType="BIGINT" property="commentNo" />
+		<id column="cuser_id" jdbcType="VARCHAR" property="cuserId" />
+		<id column="reply_no" jdbcType="BIGINT" property="replyNo" />
+		<id column="ruser_id" jdbcType="VARCHAR" property="ruserId" />
+		<result column="reply_content" jdbcType="VARCHAR"
+			property="replyContent" />
+		<result column="RREG_DATE" jdbcType="TIMESTAMP"
+			property="regDate" />
+	</resultMap>
+
+	<!-- 마이바티스 모든 버전에서 지원 -->
+	<resultMap type="testSpringBoot.domain.CommentDTO"
+		id="CommentReplystMap">
+		<id column="comment_no" jdbcType="BIGINT" property="commentNo" />
+		<id column="cuser_id" jdbcType="VARCHAR" property="cuserId" />
+		<result column="CREG_DATE" jdbcType="TIMESTAMP"
+			property="regDate" />
+		<result column="comment_subject" jdbcType="VARCHAR"
+			property="commentSubject" />
+		<result column="comment_content" jdbcType="VARCHAR"
+			property="commentContent" />
+		<collection property="replies"
+			ofType="testSpringBoot.domain.ReplyDTO" resultMap="replyBaseMap" />
+	</resultMap>
+
+
+	<select id="getCommentReplies"
+		parameterType="testSpringBoot.domain.CommentDTO"
+		resultMap="CommentReplystMap">
+		select
+		c.COMMENT_NO,c.CUSER_ID,COMMENT_SUBJECT,COMMENT_CONTENT,
+		c.REG_DATE CREG_DATE,
+		reply_no, ruser_id, reply_content, r.reg_Date RREG_DATE
+		from comment1 c left outer join reply r
+		on c.comment_no = r.comment_no
+		where c.comment_no = #{commentNo}
+	</select>
+
+	<!-- 마이바티스 3.2.8에서 지원 mybatis-spring 1.3.0 -->
+	<resultMap type="testSpringBoot.domain.CommentRepliesDTO"
+		id="collectionResultMap">
+		<association property="commentDTO"
+			javaType="testSpringBoot.domain.CommentDTO"
+			resultMap="CommentResultMap" />
+		<collection property="replies"
+			ofType="testSpringBoot.domain.ReplyDTO" resultMap="replyBaseMap" />
+	</resultMap>
+	<select id="commentRepliesCollection" parameterType="long"
+		resultMap="collectionResultMap">
+		select
+		c.COMMENT_NO,c.CUSER_ID,COMMENT_SUBJECT,COMMENT_CONTENT,
+		c.REG_DATE CREG_DATE,
+		reply_no, ruser_id, reply_content, r.reg_Date RREG_DATE
+		from comment1 c left outer join reply r
+		on c.comment_no = r.comment_no
+		where c.comment_no = #{commentNo}
+	</select>
+
+	<resultMap type="testSpringBoot.domain.CommentDTO" id="associationResultMap" >
 		<id column="comment_no" jdbcType="BIGINT" property="commentNo" />
 		<id column="cuser_id" jdbcType="VARCHAR" property="cuserId" />
 		<result column="CREG_DATE" jdbcType="TIMESTAMP" property="regDate" />
 		<result column="comment_subject" jdbcType="VARCHAR" property="commentSubject" />
 		<result column="comment_content" jdbcType="VARCHAR" property="commentContent" />
+
+		<association property="memberDTO" javaType="testSpringBoot.domain.MemberDTO">
+			<id column="user_Id" jdbcType="VARCHAR" property="userId" />
+			<result column="USER_PW" jdbcType="VARCHAR" property="userPw" />
+			<result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+			<result column="USER_BIRTH" jdbcType="TIMESTAMP" property="userBirth" />
+			<result column="USER_GENDER" jdbcType="VARCHAR" property="userGender" />
+			<result column="USER_EMAIL" jdbcType="VARCHAR" property="userEmail" />
+			<result column="USER_ADDR" jdbcType="VARCHAR" property="userAddr" />
+			<result column="USER_PH1" jdbcType="VARCHAR" property="userPh1" />
+			<result column="USER_PH2" jdbcType="VARCHAR" property="userPh2" />
+			<result column="USER_REGIST" jdbcType="TIMESTAMP" property="userRegist" />
+		</association>
 	</resultMap>
-	
-	<select id="getCommentList"
-			parameterType="testSpringBoot.domain.CommentDTO"
-			resultMap="CommentResultMap">
-		select *
-			from(select rownum rn, <include refid="baseCommentColumn" />
-				from ( select <include refid="baseColumn" />
-					from comment1
-					order by REG_DATE desc))
-			<where>
-				<if test="startEndPageDTO != null">
-					rn between #{startEndPageDTO.startPage}
-					and #{startEndPageDTO.endPage}
-				</if>
-			</where>
-	</select>
-	
-	<select id="getCommentCount" resultType="int">
-		select count(*) from comment1
+
+	<select id="getcommentUser" parameterType="long" resultMap="associationResultMap">
+		select <include refid="baseMemberColumn" />,
+				<include refid="baseColumn" />
+		from member m, comment1 c
+		<where>
+			<if test="value != null">
+				comment_no = #{commnerNo}
+			</if>
+		</where>
+
 	</select>
 </mapper>
